@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="Maroodi.Application/Maroodi.Application.csproj" />
+  <Project Path="Maroodi.Domain/Maroodi.Domain.csproj" />
+  <Project Path="Maroodi.Infrastructure/Maroodi.Infrastructure.csproj" />
+  <Project Path="Maroodi/Maroodi.Api.csproj" />
+</Solution>
