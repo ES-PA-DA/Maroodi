@@ -1,0 +1,51 @@
+# Mukulaal: E-Commerce Scraping Service
+
+**Mukulaal** (Somali for *Cat*) is a secure web scraping service designed to identify market trends and consumer behavior within the Mexican e-commerce landscape. This service serves as the primary data ingestion layer for building high-quality machine learning training datasets.
+
+
+## 🎯 Purpose
+The primary goal of this service is to aggregate data on the **most-purchased products in Mexico**. This data is used to:
+* **Build Training Datasets:** Define the initial ground-truth data for internal ML models.
+* **Market Analysis:** Track price fluctuations and product categorization across major retail sections.
+* **Secure Extraction:** Ensure data is collected through secure protocols to maintain integrity and bypass common bot-detection obstacles.
+
+## 🚀 Key Features
+* **Automated Trend Discovery:** Automatically identifies "Top Seller" and "Most Wanted" items.
+* **Localized Targeting:** Specifically tuned for Mexican e-commerce domains, currency formats, and regional pricing.
+* **Secure Pipeline:** Implements encrypted storage and secure request handling to protect the infrastructure.
+* **ML-Ready Output:** Generates structured datasets (CSV/JSON) formatted specifically for model training.
+
+---
+
+## 🛠 Tech Stack
+* **Language:** Python 3.x
+* **Scraping Framework:** [Playwright / Scrapy / Selenium]
+* **Data Processing:** Pandas / NumPy
+* **Security:** Environment-based credential management & Proxy rotation
+
+---
+
+## 📂 Project Structure
+```text
+mukulaal/
+├── .github/             # GitHub actions/workflows
+├── .vscode/             # Editor-specific settings (optional)
+├── docs/                # Documentation files
+├── src/                 # Source code lives here (recommended!)
+│   └── mukulaal/      # Actual Python package
+│       ├── __init__.py
+│       ├── config.py
+│       ├── main.py      # Entry point (CLI, API, etc.)
+│       ├── core/        # Core domain logic
+│       ├── services/    # Business logic, services
+│       ├── models/      # Pydantic/ORM models
+│       ├── api/         # REST or GraphQL routes
+│       └── utils/       # Helper functions
+├── tests/               # Unit and integration tests
+│   ├── __init__.py
+│   └── test_main.py
+├── .env                 # Environment variables
+├── pyproject.toml       # Build system & dependencies 
+├── README.md            # Project overview
+├── .gitignore
+└── requirements.txt     # Optional (for Docker or deployment)
