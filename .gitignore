@@ -1,0 +1,27 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Maroodi/.vs
+/Maroodi/Maroodi.Application/obj
+/Maroodi/Maroodi.Application/bin/Debug/net10.0
+/Maroodi/Maroodi/bin/Debug/net10.0
+/Maroodi/Maroodi/obj
+/Maroodi/bin/Debug
+/Maroodi/Maroodi.Domain/bin/Debug/net10.0
+/Maroodi/Maroodi.Domain/obj
+/Maroodi/Maroodi.Infrastructure/bin/Debug/net10.0
+/Maroodi/Maroodi.Infrastructure/obj
+/Maroodi/obj
+/Maroodi.Application/bin/Debug/net10.0
+/Maroodi.Application/obj/Debug/net10.0
+/Maroodi.Application/obj
+/Maroodi.Domain/bin/Debug/net10.0
+/Maroodi.Domain/obj/Debug/net10.0
+/Maroodi.Infrastructure/bin/Debug/net10.0
+/Maroodi.Infrastructure/obj/Debug/net10.0
+/Maroodi.Infrastructure/obj
+/Maroodi.Domain/obj
+/obj
+/.vs
+/bin/Debug
