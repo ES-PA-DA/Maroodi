@@ -6,7 +6,9 @@
 import scrapy
 
 
-class CrawlerItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class MarketItem(scrapy.Item):
+    name = scrapy.Field()
+    amount = scrapy.Field()
+    unit = scrapy.Field()
+    section = scrapy.Field()
+    price = scrapy.Field()

@@ -11,6 +11,7 @@ from enum import Enum
 DATETIME_DIR_NAME_FORMAT = "%Y-%m-%d_%H-%M-%S"
 BASE_URL = "https://tienda.calimax.com.mx"
 
+
 class CssTags(Enum):
     PRODUCTS_CONTAINER = "section.vtex-product-summary-2-x-container"
     PRODUCT_SUMMARY = "span.vtex-product-summary-2-x-productBrand"
@@ -22,6 +23,7 @@ class CssTags(Enum):
     FILTER = "div.vtex-search-result-3-x-filter__container"
     FILTER_BRANDS_LIST = f"{FILTER}--brand"
     FILTER_SUBCATEGORIES_LIST = f"{FILTER}--category-2"
+
 
 class MetaFlags(Enum):
     CATEGORY = "curr_category"
@@ -110,7 +112,7 @@ class CalimaxSpider(scrapy.Spider):
         category: str,
         subcategory: str = None,
         brand: str = None,
-        callback = None,
+        callback=None,
     ) -> scrapy.Request:
         meta_data = {
             "playwright": True,
@@ -140,34 +142,43 @@ class CalimaxSpider(scrapy.Spider):
         )
 
     def load_filters_queue(self, response, css_path: str, queue: deque[str]) -> None:
+        if len(response.css(css_path))<1:
+            print(f"WARNING: Error with CSS path: {css_path} with items {len(response.css(css_path))}")
+            return
         selectors = response.css(css_path)[0].css("label")
         for s in selectors:
             queue.append(s.xpath("@for").get().split("-")[-1])
 
-    def load_options_queue(self, response,  queue:deque[str])->None:
+    def load_options_queue(self, response, queue: deque[str]) -> None:
         categories = response.css("ul")[3].css("a")[2:]
         for item in categories:
             queue.append(item.xpath("@href").get().split("/")[-1])
 
-    def visit_next_page(self, response, playwright_page, queue, callback, curr_flag, css_filter:Optional[str]=None):
+    def visit_next_page(
+        self,
+        response,
+        playwright_page,
+        queue,
+        callback,
+        curr_flag,
+        css_filter: Optional[str] = None,
+    ):
 
         if not response.meta.get(curr_flag, False):
             if curr_flag == MetaFlags.CATEGORY.value:
                 self.load_options_queue(response, queue)
             else:
-                self.load_filters_queue(
-                    response, css_filter, queue
-                )
+                self.load_filters_queue(response, css_filter, queue)
 
         if len(queue) < 1:
             return None
 
-        body_scrapy_rq={
-            "playwright_page":playwright_page,
+        body_scrapy_rq = {
+            "playwright_page": playwright_page,
             "callback": callback,
-            "category":  response.meta.get(MetaFlags.CATEGORY.value, None),
+            "category": response.meta.get(MetaFlags.CATEGORY.value, None),
             "subcategory": response.meta.get(MetaFlags.SUBCATEGORY.value, None),
-            "brand": response.meta.get(MetaFlags.BRAND.value, None)
+            "brand": response.meta.get(MetaFlags.BRAND.value, None),
         }
 
         match curr_flag:
@@ -178,13 +189,14 @@ class CalimaxSpider(scrapy.Spider):
             case MetaFlags.BRAND.value:
                 body_scrapy_rq["brand"] = queue.popleft()
 
-        return self.scrapy_request(** body_scrapy_rq)
+        return self.scrapy_request(**body_scrapy_rq)
 
     def parse(self, response):
         if response.meta.get(MetaFlags.BRAND.value, False):
             category = response.meta[MetaFlags.CATEGORY.value]
             subcategory = response.meta[MetaFlags.SUBCATEGORY.value]
             brand = response.meta[MetaFlags.BRAND.value]
+            print(f"========================== Parsing product. Category {category} Subcategory {subcategory} Brand {brand}")
             products_selectors = response.css(CssTags.PRODUCTS_CONTAINER.value)
             products_list = [
                 {
@@ -203,28 +215,34 @@ class CalimaxSpider(scrapy.Spider):
             ds = pd.DataFrame(products_list)
             datetime_dirname = self.get_current_datetime_dir_name()
             ds.to_csv(f"{dir_path}/{subcategory}-{brand}__{datetime_dirname}.csv")
-            breakpoint()
 
         if response.meta.get(MetaFlags.SUBCATEGORY.value, False):
-            yield self.visit_next_page(response=response,
-                                       playwright_page=response.meta["playwright_page"],
-                                       queue=self.brands_queue,
-                                       css_filter=CssTags.FILTER_BRANDS_LIST.value,
-                                       callback=self.parse,
-                                       curr_flag=MetaFlags.BRAND.value)
+            print(f"========================== Parsing {MetaFlags.BRAND.value}: {self.brands_queue}")
+            yield self.visit_next_page(
+                response=response,
+                playwright_page=response.meta["playwright_page"],
+                queue=self.brands_queue,
+                css_filter=CssTags.FILTER_BRANDS_LIST.value,
+                callback=self.parse,
+                curr_flag=MetaFlags.BRAND.value,
+            )
 
         if response.meta.get(MetaFlags.CATEGORY.value, False):
-            yield self.visit_next_page(response=response,
-                                       playwright_page= response.meta["playwright_page"],
-                                       queue=self.sub_categories_queue,
-                                       css_filter=CssTags.FILTER_SUBCATEGORIES_LIST.value,
-                                       callback=self.parse,
-                                       curr_flag=MetaFlags.SUBCATEGORY.value)
+            print(f"========================== Parsing {MetaFlags.SUBCATEGORY.value}: {self.sub_categories_queue}")
+            yield self.visit_next_page(
+                response=response,
+                playwright_page=response.meta["playwright_page"],
+                queue=self.sub_categories_queue,
+                css_filter=CssTags.FILTER_SUBCATEGORIES_LIST.value,
+                callback=self.parse,
+                curr_flag=MetaFlags.SUBCATEGORY.value,
+            )
 
 
+        print(f"========================== Parsing {MetaFlags.CATEGORY.value}: {self.categories_queue}")
         yield self.visit_next_page(
             response=response,
-            playwright_page= response.meta["playwright_page"],
+            playwright_page=response.meta["playwright_page"],
             queue=self.categories_queue,
             callback=self.parse,
             curr_flag=MetaFlags.CATEGORY.value,
