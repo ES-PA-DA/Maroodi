@@ -7,6 +7,10 @@ services:
     ports:
       - "5000:8080"
       - "5001:8081"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgresql;Database=maroodi_db;Port=5432;Username=maroodi;Password=maroodi_password;SSL Mode=Disable;
+    depends_on:
+      - postgresql
 
   postgresql:
     image: postgres:18

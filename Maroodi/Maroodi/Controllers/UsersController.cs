@@ -1,5 +1,4 @@
 using Maroodi.Application.UseCases;
-using Maroodi.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Maroodi.Controllers
