@@ -1,19 +1,50 @@
 import scrapy
 from scrapy_playwright.page import PageMethod
-from collections import deque
 
 from ..items import MarketItem
 from ..itemsloader import MarketItemLoader
+from ..assets.assets import load_categories, update_categories
+from ..utils.utils import str_to_list
+
+class CategoriesNotAvailable(Exception):
+    def __init__(self, *args: object) -> None:
+        super().__init__(*args)
+
+
+def user_categories(curr_categories_list, selected_categories):
+        if selected_categories == "all":
+            return curr_categories_list
+        c_list = str_to_list(selected_categories)
+        if all([ c in curr_categories_list for c in c_list]):
+            return c_list
+        raise CategoriesNotAvailable(f"Some of your selected categories {c_list} are not available. Check the avaible categories or run the command with param --update_categories=True. Available Categories:\n {curr_categories_list}")
+
 
 
 class CalimaxmarketSpider(scrapy.Spider):
     name = "calimaxmarket"
     allowed_domains = ["tienda.calimax.com.mx"]
     start_urls = ["https://tienda.calimax.com.mx"]
-    categories_queue = deque()
-    max_page = 1
+    curr_categories_list = []
+    pages_per_category = 0
+    update_categories = False
+    user_categories = []
+    _user_categories_str = ""
+
+
+    def __init__(self, update_categories:bool=False, user_categories:str="all", pages_per_category:str="1", *args,**kwargs) -> None:
+        self.curr_categories_list = load_categories()
+
+        self.pages_per_category = int(pages_per_category)
+        self.update_categories = update_categories
+        self._user_categories_str = user_categories
+
+        super(CalimaxmarketSpider, self).__init__(*args, **kwargs)
+
+
 
     def start_requests(self):
+
         yield scrapy.Request(
             "https://tienda.calimax.com.mx",
             meta={
@@ -67,39 +98,47 @@ class CalimaxmarketSpider(scrapy.Spider):
             next_page = (
                 response.meta["next_page"] + 1 if "next_page" in response.meta else 2
             )
-            url = f"{response.url.split('=')[0]}={next_page}"
-            yield scrapy.Request(
-                url=url,
-                callback=self.parse_items,
-                errback=self.errback_handle,
-                meta={
-                    "playwright": True,
-                    "playwright_include_page": True,
-                    "load_site": True,
-                    "playwright_page": response.meta["playwright_page"],
-                    "next_page": next_page,
-                    "playwright_page_methods": [
-                        PageMethod(
-                            "wait_for_selector",
-                            "section.vtex-product-summary-2-x-container",
-                        )
-                    ],
-                },
-            )
+            crawled_pages = response.meta["crawled_pages"] + 1 if "crawled_pages" in response.meta else 2
+            if crawled_pages <= self.pages_per_category:
+                url = f"{response.url.split('=')[0]}={next_page}"
+                yield scrapy.Request(
+                    url=url,
+                    callback=self.parse_items,
+                    errback=self.errback_handle,
+                    meta={
+                        "playwright": True,
+                        "playwright_include_page": True,
+                        "load_site": True,
+                        "playwright_page": response.meta["playwright_page"],
+                        "next_page": next_page,
+                        "crawled_pages": crawled_pages,
+                        "playwright_page_methods": [
+                            PageMethod(
+                                "wait_for_selector",
+                                "section.vtex-product-summary-2-x-container",
+                            )
+                        ],
+                    },
+                )
 
     def errback_handle(self, failure):
         print(f"Error loading {failure.request.url}")
 
     def parse(self, response):
         try:
-            categories = response.css("ul")[3].css("a")[2:]
-            for item in categories:
-                self.categories_queue.append(item.xpath("@href").get().split("/")[-1])
+            if not self.curr_categories_list or self.update_categories:
+                print("     Updating Categories")
+                categories_items = response.css("ul")[3].css("a")[2:]
+                for item in categories_items:
+                    self.curr_categories_list.append(item.xpath("@href").get().split("/")[-1])
+
+                update_categories(self.curr_categories_list)
+
+            self.user_categories = user_categories(self.curr_categories_list, self._user_categories_str)  
 
             print("=" * 60)
             print("     Extracting Categories")
-            while len(self.categories_queue) > 0:
-                curr_category = self.categories_queue.popleft()
+            for curr_category in self.user_categories:
                 print(f"        Category {curr_category}")
                 yield scrapy.Request(
                     url=f"https://tienda.calimax.com.mx/{curr_category}?page=1",
@@ -119,4 +158,4 @@ class CalimaxmarketSpider(scrapy.Spider):
                     },
                 )
         except Exception as e:
-            print(f"Error Parsing {curr_category}: {e}")
+            raise e
