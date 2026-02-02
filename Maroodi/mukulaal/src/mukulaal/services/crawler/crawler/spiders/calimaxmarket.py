@@ -61,7 +61,7 @@ class CalimaxmarketSpider(scrapy.Spider):
 
             price_value = int(price_int_label) + int(price_frac_label) / 100
             product_item.add_value("price", price_value)
-            product_item.add_value("section", response.url.split("/")[-1])
+            product_item.add_value("section", response.url.split("/")[-1].split("?")[0])
             yield product_item.load_item()
         if response.xpath("//div[contains(text(), 'Mostrar más')]"):
             next_page = (
