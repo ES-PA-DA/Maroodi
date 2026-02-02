@@ -11,6 +11,8 @@ class CalimaxmarketSpider(scrapy.Spider):
     allowed_domains = ["tienda.calimax.com.mx"]
     start_urls = ["https://tienda.calimax.com.mx"]
     categories_queue = deque()
+    max_page = 1
+    next_page= False
 
     def start_requests(self):
         yield scrapy.Request(
@@ -33,7 +35,6 @@ class CalimaxmarketSpider(scrapy.Spider):
         return price
 
     def parse_items(self, response):
-
         items = response.css("section.vtex-product-summary-2-x-container")
 
         for i in items:
@@ -49,6 +50,31 @@ class CalimaxmarketSpider(scrapy.Spider):
             product_item.add_value("price", price_value)
             product_item.add_value("section", response.url.split("/")[-1])
             yield product_item.load_item()
+        if response.xpath("//div[contains(text(), 'Mostrar más')]"):
+            next_page = response.meta["next_page"] + 1 if "next_page" in response.meta else 2
+            url = f"{response.url.split('=')[0]}={next_page}"
+            yield scrapy.Request(url=url,
+                                 callback=self.parse_items,
+                                 errback=self.errback_handle,
+                                 meta={
+                                     "playwright": True,
+                                     "playwright_include_page": True,
+                                     "load_site": True,
+                                     "playwright_page":response.meta["playwright_page"],
+                                     "next_page": next_page,
+                                     "playwright_page_methods": [
+                                         PageMethod("wait_for_selector", "section.vtex-product-summary-2-x-container")
+                                     ],
+                                 }
+                                )
+
+        
+
+
+
+    def errback_handle(self, failure):
+        print(f"Error loading {failure.request.url}")
+
 
     def parse(self, response):
         try:
@@ -61,8 +87,9 @@ class CalimaxmarketSpider(scrapy.Spider):
             while len(self.categories_queue) > 0:
                 curr_category = self.categories_queue.popleft()
                 print(f"        Category {curr_category}")
-                yield scrapy.Request(url=f"https://tienda.calimax.com.mx/{curr_category}",
+                yield scrapy.Request(url=f"https://tienda.calimax.com.mx/{curr_category}?page=1",
                                      callback=self.parse_items,
+                                     errback=self.errback_handle,
                                      meta={
                                          "playwright": True,
                                          "playwright_include_page": True,
