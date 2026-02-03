@@ -11,11 +11,12 @@ import {
 } from "@expo-google-fonts/dm-sans";
 
 import { useEffect } from "react";
-import { Stack } from "expo-router";
+import { Tabs } from "expo-router";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 preventAutoHideAsync();
 
-export default function RootLayout() {
+export default function TabLayout() {
 
   const [loaded, error] = useFonts({
     DMSans_700Bold,
@@ -30,5 +31,15 @@ export default function RootLayout() {
 
   if (!loaded && !error) return null;
 
-  return <Stack screenOptions={{ headerShown: false, }} />;
+  return (
+    <Tabs screenOptions={{ headerShown: false, }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title:"New Price",
+          tabBarIcon: ({ color }) => <MaterialIcons size={ 24 } name="add" color={ color } />
+        }}
+      />
+    </Tabs>
+  );
 }
