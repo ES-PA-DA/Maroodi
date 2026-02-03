@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
+import Colors from "@constants/Colors";
+import Spacing from "@constants/Spacing";
 import { StyleSheet } from "react-native";
-import { Colors } from "@constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type BaseScreenProps = {
@@ -16,6 +17,7 @@ export default function BaseScreen({ children } : BaseScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: Spacing.screen.padding,
     backgroundColor: Colors.backgroundColor,
   },
 });

@@ -1,3 +1,5 @@
-export const Colors = {
-  backgroundColor: "#FFFFFF",
+const Colors = {
+  backgroundColor: "#FFF",
 };
+
+export default Colors;
