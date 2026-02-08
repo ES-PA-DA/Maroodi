@@ -2,7 +2,7 @@ from itemloaders.processors import TakeFirst, MapCompose
 from scrapy.loader import ItemLoader
 import re
 
-from .utils import units
+from .utils.constants import units
 
 PER_KG = "POR KG"
 
