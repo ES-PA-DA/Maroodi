@@ -9,6 +9,12 @@ const Spacing = {
     borderRadius: 20,
     marginBottom: 16,
   },
+  iconButton: {
+    width: 40,
+    height: 40,
+    iconSize: 24,
+    borderRadius: 12,
+  },
 };
 
 export default Spacing;
