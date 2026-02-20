@@ -4,6 +4,7 @@ const Typography = {
   medium: "DMSans_500Medium",
   regular: "DMSans_400Regular",
   sizes: {
+    text: 16,
     header: 32,
   },
 };

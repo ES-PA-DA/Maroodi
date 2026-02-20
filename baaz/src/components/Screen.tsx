@@ -38,6 +38,7 @@ export default function Screen({
 
 const styles = StyleSheet.create({
   screen: {
+    gap: 16,
     flex: 1,
     position: "relative",
     padding: Spacing.screenPadding,

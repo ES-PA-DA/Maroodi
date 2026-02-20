@@ -15,6 +15,17 @@ const Spacing = {
     iconSize: 24,
     borderRadius: 12,
   },
+  input: {
+    gap: 16,
+    height: 56,
+    borderWidth: 1,
+    paddingLeft: 12,
+    borderRadius: 4,
+    paddingRight: 16,
+    focus: {
+      borderWidth: 2,
+    },
+  },
 };
 
 export default Spacing;

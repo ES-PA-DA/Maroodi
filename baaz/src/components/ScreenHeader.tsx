@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
+    letterSpacing: -1,
     textAlign: "center",
     fontFamily: Typography.bold,
     fontSize: Typography.sizes.header,
