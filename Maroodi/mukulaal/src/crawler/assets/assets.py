@@ -1,8 +1,9 @@
 import json
 import os
+from pathlib import Path
 
 # Get the directory of the current script
-script_dir = os.path.dirname(os.path.abspath(__file__))
+script_dir = Path.cwd()
 
 CATEGORIES_FILE = f"{script_dir}/categories.json"
 

@@ -1,4 +1,12 @@
 services:
+  maroodi.crawler:
+    image: mukulaal
+    build:
+      context: ./mukulaal/
+      dockerfile: Dockerfile
+    ports:
+      - "6800:6800"
+
   maroodi.api:
     image: ${DOCKER_REGISTRY-}maroodiapi
     build:

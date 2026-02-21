@@ -96,5 +96,5 @@ DOWNLOAD_HANDLERS = {
 ### (Optional)
 PLAYWRIGHT_BROWSER_TYPE = "chromium"  # Choose 'chromium', 'firefox', or 'webkit'
 PLAYWRIGHT_LAUNCH_OPTIONS = {
-    "headless": False,  # Set to True if you prefer headless mode
+    "headless": True,  # Set to True if you prefer headless mode
 }
