@@ -6,6 +6,7 @@ const Typography = {
   sizes: {
     text: 16,
     header: 32,
+    caption: 14,
   },
 };
 

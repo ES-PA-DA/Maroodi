@@ -26,6 +26,16 @@ const Spacing = {
       borderWidth: 2,
     },
   },
+  itemList: {
+    gap: 16,
+    paddingY: 8,
+    paddingX: 16,
+    marginBottom: 16,
+    image: {
+      width: 56,
+      height: 56,
+    },
+  },
 };
 
 export default Spacing;
