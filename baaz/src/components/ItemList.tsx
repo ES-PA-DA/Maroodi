@@ -7,15 +7,16 @@ import { StyleSheet } from "react-native";
 import Typography from "@constants/Typography";
 
 type ItemListProps = {
+  id: number;
   title: string;
   slot: ReactNode;
   subtitle: string;
-  onItemClick: () => void;
+  onItemClick: (id: number) => void;
 };
 
-export default function ItemList({ title, slot, subtitle, onItemClick } : ItemListProps) {
+export default function ItemList({ id, title, slot, subtitle, onItemClick } : ItemListProps) {
   return (
-    <Pressable style={ styles.item } onPress={ onItemClick }>
+    <Pressable style={ styles.item } onPress={ () => onItemClick(id) }>
       <View style={ styles.image } />
       <View style={ styles.texts }>
         <Text style={ styles.title }>{ title }</Text>
