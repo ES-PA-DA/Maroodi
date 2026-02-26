@@ -7,6 +7,8 @@ const Typography = {
     text: 16,
     header: 32,
     caption: 14,
+    title: 56,
+    subtitle: 24,
   },
 };
 
