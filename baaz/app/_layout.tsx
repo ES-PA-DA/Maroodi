@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { Stack } from "expo-router";
+import { hideAsync } from "expo-splash-screen";
 import { useFonts } from "@expo-google-fonts/dm-sans";
-import { hideAsync, preventAutoHideAsync } from "expo-splash-screen";
+import { preventAutoHideAsync } from "expo-splash-screen";
 
 import {
   DMSans_700Bold,
@@ -27,5 +28,5 @@ export default function RootLayout() {
 
   if (!loaded && !error) return null;
 
-  return <Stack screenOptions={{ headerShown: false }}/>;
+  return <Stack screenOptions={{ headerShown: false }} />;
 }
