@@ -44,7 +44,9 @@ export default function Index() {
 
 
   return (
-    <Screen floatingActionButtonShown={ true }>
+    <Screen 
+      floatingActionButtonShown={ true }
+      onFloatingActionButtonClick={ () => { router.push("./stores/create"); } } >
       <ScreenHeader>Stores</ScreenHeader>
       <Input
         iconName="search"
