@@ -46,7 +46,9 @@ export default function Store() {
 
 
   return (
-    <Screen floatingActionButtonShown={ true }>
+    <Screen 
+      floatingActionButtonShown={ true }
+      onFloatingActionButtonClick={ () => { router.push("./products/create"); } } >
       <ScreenHeader
         iconName="edit"
         iconShown={ true }>Products</ScreenHeader>

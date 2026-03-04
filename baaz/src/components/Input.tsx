@@ -22,6 +22,7 @@ export default function Input({ placeholder, iconName, onInputChange } : InputPr
       <TextInput
         placeholder={ placeholder }
         style={ styles.placeholder }
+        placeholderTextColor="#757575"
         onFocus={ () => { onFocus(!isFocus); } }
         onChangeText={ (input) => { onInputChange(input); }}
       />
