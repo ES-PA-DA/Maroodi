@@ -33,7 +33,7 @@ export default function CreateUpdateStore() {
         placeholder="Category"
         selectedItem={ category }
         onSelectedItem={ setCategory } />
-      <Input placeholder="Price" iconName="text-fields" onInputChange={() => {}} />
+      <Input placeholder="Price" iconName="money" onInputChange={() => {}} />
       <ImageInput />
       <View style={ styles.buttons }>
         <Button>Add</Button>

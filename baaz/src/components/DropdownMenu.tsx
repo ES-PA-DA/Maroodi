@@ -39,8 +39,9 @@ export default function DropdownMenu({
       { toggle &&
         <View style={ styles.items }>
           { items.map((item) => (
-              <Pressable>
-                <Text style={ styles.item }>{ item }</Text>
+              <Pressable onPress={ () => { onSelectedItem(item); onToggle(!toggle); }} >
+                <Text 
+                  style={ [styles.item, selectedItem === item ? styles.selectedItem : ""] } >{ item }</Text>
               </Pressable>
             )) 
           }
@@ -73,13 +74,16 @@ const styles = StyleSheet.create({
   },
   items: {
     gap: 8,
+    zIndex: 100,
     width: "100%",
-    marginTop: 64,
+    marginTop: 60,
     borderWidth: 1,
+    borderRadius: 4,
     display: "flex",
+    elevation: 3,
     position: "absolute",
     borderColor: "#D3D3D3",
-    backgroundColor: "#000",
+    backgroundColor: "#FFF",
   },
   item: {
     color: "#000",
@@ -87,5 +91,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontFamily: Typography.regular,
     fontSize: Typography.sizes.text,
-  }
+  },
+  selectedItem: {
+    backgroundColor: "#D3D3D3",
+  },
 });
