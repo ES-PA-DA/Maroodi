@@ -6,12 +6,15 @@ import Typography from "../constants/Typography";
 
 type ButtonProps = {
   children: string;
+  onClick: () => void;
 };
 
 
-export default function Button({ children } : ButtonProps) {
+export default function Button({ children, onClick } : ButtonProps) {
   return (
-    <Pressable style={ styles.button }>
+    <Pressable 
+      style={ styles.button }
+      onPress={ () => { onClick(); }}>
       <Text style={ styles.text }>{ children }</Text>
     </Pressable>
   );

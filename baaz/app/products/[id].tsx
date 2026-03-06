@@ -36,7 +36,7 @@ export default function CreateUpdateStore() {
       <Input placeholder="Price" iconName="money" onInputChange={() => {}} />
       <ImageInput />
       <View style={ styles.buttons }>
-        <Button>Add</Button>
+        <Button onClick={ () => {} }>Add</Button>
       </View>
     </Screen>
   );

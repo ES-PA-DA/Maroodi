@@ -51,7 +51,10 @@ export default function Store() {
       onFloatingActionButtonClick={ () => { router.push("./products/create"); } } >
       <ScreenHeader
         iconName="edit"
-        iconShown={ true }>Products</ScreenHeader>
+        iconShown={ true }
+        onIconClick={ () => router.push({ pathname: "./stores/[id]", params: { id: storeId } }) }>
+        Products
+      </ScreenHeader>
       <Input 
         iconName="search"
         placeholder="Search"

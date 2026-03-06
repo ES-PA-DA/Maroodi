@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { ListRenderItem } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
 import Screen from "@components/Screen";
+import PriceModal from "@components/PriceModal";
 import IconButton from "@components/IconButton";
 import ItemList from "@/src/components/ItemList";
 import CustomTitle from "@components/CustomTitle";
@@ -21,6 +23,7 @@ const priceKeyExtractor = (price: Price, _: number) => String(price.id);
 
 export default function Product() {
 
+  const [showModal, setShowModal] = useState(false);
   const { storeId, productId } = useLocalSearchParams();
 
   const data: Price[] = [
@@ -28,6 +31,9 @@ export default function Product() {
     { id: 2, amount: "18.90", created_at: "2026-02-27" },
     { id: 3, amount: "21.90", created_at: "2026-02-27" },
   ];
+
+
+  const onPriceModalDismiss = () => setShowModal(false);
 
 
   const priceRenderItem: ListRenderItem<Price> = ({ item: price }) => (
@@ -41,17 +47,22 @@ export default function Product() {
 
 
   return (
-    <Screen floatingActionButtonShown={ true }>
-      <ScreenHeader 
-        iconName="edit"
-        iconShown={ true }>Prices</ScreenHeader>
-      <CustomTitle 
-        text="$78.95"
-        title="Current Price" />
-      <ScrollableList
-        data={ data }
-        renderItem={ priceRenderItem }
-        keyExtractor={ priceKeyExtractor } />
-    </Screen>
+    <>
+      <Screen
+        floatingActionButtonShown={ true }
+        onFloatingActionButtonClick={ () => { setShowModal(true); }}>
+        <ScreenHeader 
+          iconName="edit"
+          iconShown={ true }>Prices</ScreenHeader>
+        <CustomTitle 
+          text="$78.95"
+          title="Current Price" />
+        <ScrollableList
+          data={ data }
+          renderItem={ priceRenderItem }
+          keyExtractor={ priceKeyExtractor } />
+      </Screen>
+      { showModal && <PriceModal onDismiss={ onPriceModalDismiss }/> }
+    </>
   );
 }
