@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "expo-router";
 import { ListRenderItem } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
@@ -22,6 +23,8 @@ const priceKeyExtractor = (price: Price, _: number) => String(price.id);
 
 
 export default function Product() {
+
+  const router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
   const { storeId, productId } = useLocalSearchParams();
@@ -53,7 +56,11 @@ export default function Product() {
         onFloatingActionButtonClick={ () => { setShowModal(true); }}>
         <ScreenHeader 
           iconName="edit"
-          iconShown={ true }>Prices</ScreenHeader>
+          iconShown={ true }
+          onIconClick={ () => {
+            router.push({ pathname: "./products/[id]", params: { id: productId, storeId: storeId} }) }
+          }
+          >Prices</ScreenHeader>
         <CustomTitle 
           text="$78.95"
           title="Current Price" />

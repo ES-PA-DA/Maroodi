@@ -14,28 +14,41 @@ const getStore = (id: number) => ({ id: 1, name: "Walmart", lat: 1, log: 1 });
 
 export default function CreateUpdateStore() {
 
-  const props = useLocalSearchParams();
+  const params = useLocalSearchParams();
+  const isEdition = !!params.id && !isNaN(Number(params.id));
+
+  const store = isEdition ? getStore(Number(params.id)) : undefined;
 
 
   return (
     <Screen>
-      <ScreenHeader>New product</ScreenHeader>
-      <Input
-        placeholder="Name"
-        iconName="text-fields"
-        onInputChange={() => {}} />
-      <Input
-        placeholder="Latitude"
-        iconName="text-fields"
-        onInputChange={() => {}} />
+      <ScreenHeader
+        iconName="delete"
+        iconShown={ Boolean(store) } 
+        onIconClick={ () => {} }>{ store?.name || "New store" }</ScreenHeader>
       <Input
         iconName="text-fields"
-        placeholder="Longitude"
-        onInputChange={() => {}} />
+        onInputChange={() => {}} 
+        placeholder={ store?.name || "Name" } />
+      <Input
+        iconName="text-fields"
+        onInputChange={() => {}} 
+        placeholder={ !!store ? String(store.lat) : "Latitude" } />
+      <Input
+        iconName="text-fields"
+        onInputChange={() => {}} 
+        placeholder={ !!store ? String(store?.log) : "Longitude" } />
       <ImageInput />
-      <View style={ styles.buttons }>
-        <Button onClick={ () => {} }>Add</Button>
-      </View>
+      { !store &&
+        <View style={ styles.buttons }>
+          <Button onClick={ () => {} }>Add</Button>
+        </View>
+      }
+      { store &&
+        <View style={ styles.buttons }>
+          <Button onClick={ () => {} }>Update</Button>
+        </View>
+      }
     </Screen>
   );
 }
@@ -43,6 +56,7 @@ export default function CreateUpdateStore() {
 
 const styles = StyleSheet.create({
   buttons: {
+    gap: 8,
     flex: 1,
     display: "flex",
     justifyContent: "flex-end",

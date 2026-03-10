@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 
 import Input from "@components/Input";
 import Screen from "@components/Screen";
@@ -10,10 +11,19 @@ import ScreenHeader from "@components/ScreenHeader";
 import DropdownMenu from "@components/DropdownMenu";
 
 
+const getProduct = (id: Number) => ({
+  id: 1, name: "Avocado", unit: "KG", category: "Vegetables", price: 100
+});
+
+
 export default function CreateUpdateStore() {
 
-  const [unit, setUnit] = useState("");
-  const [category, setCategory] = useState("");
+  const params = useLocalSearchParams();
+  const isEdition = params?.id && !isNaN(Number(params.id));
+  const product = isEdition ? getProduct(Number(params.id)) : undefined;
+
+  const [unit, setUnit] = useState(product?.unit || "");
+  const [category, setCategory] = useState(product?.category || "");
 
   const units = ["KG", "PZ", "L"];
   const categories = ["Fruits", "Vegetables", "Meat"];
@@ -21,8 +31,15 @@ export default function CreateUpdateStore() {
 
   return (
     <Screen>
-      <ScreenHeader>New product</ScreenHeader>
-      <Input placeholder="Name" iconName="text-fields" onInputChange={() => {}} />
+      <ScreenHeader
+        iconName="delete"
+        onIconClick={ () => {} }
+        iconShown={ Boolean(product) }
+      >{ product?.name || "New product" }</ScreenHeader>
+      <Input
+        iconName="text-fields"
+        onInputChange={() => {}}
+        placeholder={ product?.name || "Name" } />
       <DropdownMenu 
         items={ units } 
         placeholder="Unit"
@@ -33,11 +50,21 @@ export default function CreateUpdateStore() {
         placeholder="Category"
         selectedItem={ category }
         onSelectedItem={ setCategory } />
-      <Input placeholder="Price" iconName="money" onInputChange={() => {}} />
+      <Input 
+        iconName="money"
+        onInputChange={() => {}}
+        placeholder={ !!product ? String(product?.price) : "Price" } />
       <ImageInput />
-      <View style={ styles.buttons }>
-        <Button onClick={ () => {} }>Add</Button>
-      </View>
+      { !product &&
+        <View style={ styles.buttons }>
+          <Button onClick={ () => {} }>Add</Button>
+        </View>
+      }
+      { product &&
+        <View style={ styles.buttons }>
+          <Button onClick={ () => {} }>Update</Button>
+        </View>
+      }
     </Screen>
   );
 }

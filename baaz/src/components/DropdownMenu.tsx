@@ -38,8 +38,8 @@ export default function DropdownMenu({
       </Pressable>
       { toggle &&
         <View style={ styles.items }>
-          { items.map((item) => (
-              <Pressable onPress={ () => { onSelectedItem(item); onToggle(!toggle); }} >
+          { items.map((item, idx) => (
+              <Pressable key={ idx } onPress={ () => { onSelectedItem(item); onToggle(!toggle); }} >
                 <Text 
                   style={ [styles.item, selectedItem === item ? styles.selectedItem : ""] } >{ item }</Text>
               </Pressable>
