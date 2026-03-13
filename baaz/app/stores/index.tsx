@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { ListRenderItem } from "react-native";
+import { useSQLiteContext } from "expo-sqlite";
+import { IStore } from "@/src/storage/storeService";
+import { getStores } from "@/src/storage/storeService";
 
 import Input from "@components/Input";
 import Screen from "@components/Screen";
@@ -24,13 +27,20 @@ const storeKeyExtractor = (store: Store, _: number) => String(store.id);
 export default function Index() {
 
   const router = useRouter();
-  const [_, onSearchInput] = useState("");
+  const db = useSQLiteContext();
 
-  const data: Store[] = [
-    { id: 1, name: "Walmart", created_at: "2026-02-26", amountOfProducts: 10 },
-    { id: 2, name: "Calimax", created_at: "2026-02-26", amountOfProducts: 8 },
-    { id: 3, name: "Soriana", created_at: "2026-02-26", amountOfProducts: 21 },
-  ];
+  const [_, onSearchInput] = useState("");
+  const [stores, setStores] = useState<IStore[] | null>(null);
+
+  useEffect(() => {
+
+    const fetchStores = async () => {
+      const data = await getStores(db);
+      setStores(data);
+    };
+
+    fetchStores();
+  }, []);
 
 
   const storeRenderItem: ListRenderItem<Store> = ({ item: store }) => (
@@ -38,7 +48,7 @@ export default function Index() {
       id={ store.id }
       title={ store.name }
       subtitle={ store.created_at }
-      slot={ <TextSlot text={ `${store.amountOfProducts} product(s)` } /> }
+      slot={ <TextSlot text={ `N/A product(s)` } /> }
       onItemClick={(id: number) => {router.push({ pathname: "./products", params: { storeId: id }})}} />
   );
 
@@ -53,7 +63,7 @@ export default function Index() {
         placeholder="Search"
         onInputChange={ onSearchInput } />
       <ScrollableList
-        data={ data }
+        data={ stores }
         renderItem={ storeRenderItem }
         keyExtractor={ storeKeyExtractor } />
     </Screen>

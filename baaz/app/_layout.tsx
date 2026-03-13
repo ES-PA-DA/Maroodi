@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { Stack } from "expo-router";
+import client from "@/src/storage/client";
+import { SQLiteProvider } from "expo-sqlite";
 import { hideAsync } from "expo-splash-screen";
 import { useFonts } from "@expo-google-fonts/dm-sans";
 import { preventAutoHideAsync } from "expo-splash-screen";
@@ -28,5 +30,11 @@ export default function RootLayout() {
 
   if (!loaded && !error) return null;
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <SQLiteProvider 
+      onInit={client}
+      databaseName="storage.db">
+      <Stack screenOptions={{ headerShown: false }} />
+    </SQLiteProvider>
+  );
 }
