@@ -2,7 +2,9 @@ import { useRouter } from "expo-router";
 import { ListRenderItem } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { IStore } from "@/src/storage/storeService";
+import { IProduct } from "@/src/storage/productService";
 import { getStoreById } from "@/src/storage/storeService";
+import { getProducts } from "@/src/storage/productService";
 
 import Input from "@components/Input";
 import Screen from "@components/Screen";
@@ -32,12 +34,7 @@ export default function Store() {
   const { storeId } = useLocalSearchParams();
 
   const [store, setStore] = useState<IStore | null>(null);
-  
-  const data: Product[] = [
-    { id: 1, name: "Avocado", created_at: "2026-02-27", amountOfPrices: 10 },
-    { id: 2, name: "Milk", created_at: "2026-02-27", amountOfPrices: 8 },
-    { id: 3, name: "Cereal", created_at: "2026-02-27", amountOfPrices: 21 },
-  ];
+  const [products, setProducts] = useState<IProduct[] | null>(null);
 
 
   useEffect(() => {
@@ -47,7 +44,13 @@ export default function Store() {
       setStore(data);
     };
 
+    const fetchProducts = async () => {
+      const data = await getProducts(db, Number(storeId));
+      setProducts(data);
+    };
+
     fetchStore();
+    fetchProducts();
   }, []);
 
 
@@ -66,7 +69,10 @@ export default function Store() {
   return (
     <Screen 
       floatingActionButtonShown={ true }
-      onFloatingActionButtonClick={ () => { router.push("./products/create"); } } >
+      onFloatingActionButtonClick={ () => { router.push({
+        pathname: "./products/create",
+        params: { storeId: storeId }
+      }); } } >
       <ScreenHeader
         iconName="edit"
         iconShown={ true }
@@ -78,7 +84,7 @@ export default function Store() {
         placeholder="Search"
         onInputChange={ () => {} } />
       <ScrollableList
-        data={ data }
+        data={ products }
         renderItem={ productRenderItem }
         keyExtractor={ productKeyExtractor } />
     </Screen>

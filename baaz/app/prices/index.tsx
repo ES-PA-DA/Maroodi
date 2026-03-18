@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { ListRenderItem } from "react-native";
 import { useLocalSearchParams } from "expo-router";
@@ -10,6 +10,8 @@ import ItemList from "@/src/components/ItemList";
 import CustomTitle from "@components/CustomTitle";
 import ScreenHeader from "@/src/components/ScreenHeader";
 import ScrollableList from "@/src/components/ScrollableList";
+import { useSQLiteContext } from "expo-sqlite";
+import { getProductById, IProduct } from "@/src/storage/productService";
 
 
 type Price = {
@@ -25,15 +27,28 @@ const priceKeyExtractor = (price: Price, _: number) => String(price.id);
 export default function Product() {
 
   const router = useRouter();
+  const db = useSQLiteContext();
 
   const [showModal, setShowModal] = useState(false);
   const { storeId, productId } = useLocalSearchParams();
+  const [product, setProduct] = useState<IProduct | null>(null);
 
   const data: Price[] = [
     { id: 1, amount: "17.90", created_at: "2026-02-27" },
     { id: 2, amount: "18.90", created_at: "2026-02-27" },
     { id: 3, amount: "21.90", created_at: "2026-02-27" },
   ];
+
+
+  useEffect(() => {
+
+    const fetchProduct = async () => {
+      const data = await getProductById(db, Number(productId));
+      setProduct(data);
+    };
+
+    fetchProduct();
+  }, []);
 
 
   const onPriceModalDismiss = () => setShowModal(false);
@@ -60,7 +75,7 @@ export default function Product() {
           onIconClick={ () => {
             router.push({ pathname: "./products/[id]", params: { id: productId, storeId: storeId} }) }
           }
-          >Prices</ScreenHeader>
+          >{ product?.name || "Prices" }</ScreenHeader>
         <CustomTitle 
           text="$78.95"
           title="Current Price" />
