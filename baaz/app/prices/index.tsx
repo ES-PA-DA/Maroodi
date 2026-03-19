@@ -11,7 +11,9 @@ import CustomTitle from "@components/CustomTitle";
 import ScreenHeader from "@/src/components/ScreenHeader";
 import ScrollableList from "@/src/components/ScrollableList";
 import { useSQLiteContext } from "expo-sqlite";
-import { getProductById, IProduct } from "@/src/storage/productService";
+import {
+  getProductById, getProductPrices, IPrice, IProduct, getProductStoreId, addProductPrice, deleteProductPrice
+} from "@/src/storage/productService";
 
 
 type Price = {
@@ -31,13 +33,8 @@ export default function Product() {
 
   const [showModal, setShowModal] = useState(false);
   const { storeId, productId } = useLocalSearchParams();
+  const [prices, setPrices] = useState<IPrice[] | null>(null);
   const [product, setProduct] = useState<IProduct | null>(null);
-
-  const data: Price[] = [
-    { id: 1, amount: "17.90", created_at: "2026-02-27" },
-    { id: 2, amount: "18.90", created_at: "2026-02-27" },
-    { id: 3, amount: "21.90", created_at: "2026-02-27" },
-  ];
 
 
   useEffect(() => {
@@ -47,20 +44,39 @@ export default function Product() {
       setProduct(data);
     };
 
+    const fetchPrices = async () => {
+      let data:any = await getProductStoreId(db, Number(storeId), Number(productId));
+      if (data) {
+        const prices = await getProductPrices(db, data.id);
+        setPrices(prices);
+      }
+    };
+
     fetchProduct();
+    fetchPrices();
   }, []);
 
 
   const onPriceModalDismiss = () => setShowModal(false);
 
 
-  const priceRenderItem: ListRenderItem<Price> = ({ item: price }) => (
+  const onAddPriceClick = async (price: string) => {
+    const id: any = await getProductStoreId(db, Number(storeId), Number(productId));
+    await addProductPrice(db, id.id, price);
+  };
+
+  const onDeletePriceClick = async (id: number) => {
+    await deleteProductPrice(db, id);
+  }
+
+
+  const priceRenderItem: ListRenderItem<any> = ({ item: price }) => (
     <ItemList
       id={ price.id }
       onItemClick={ () => {} }
-      title={ "$" + price.amount }
+      title={ "$" + price?.price || "" }
       subtitle={ price.created_at }
-      slot={ <IconButton iconName="close" /> } />
+      slot={ <IconButton iconName="close" onIconClick={ () => { onDeletePriceClick(price.id); }} /> } />
   );
 
 
@@ -77,14 +93,14 @@ export default function Product() {
           }
           >{ product?.name || "Prices" }</ScreenHeader>
         <CustomTitle 
-          text="$78.95"
+          text={ prices ? "$" + prices[prices.length - 1].price : "N/A" }
           title="Current Price" />
         <ScrollableList
-          data={ data }
+          data={ prices }
           renderItem={ priceRenderItem }
           keyExtractor={ priceKeyExtractor } />
       </Screen>
-      { showModal && <PriceModal onDismiss={ onPriceModalDismiss }/> }
+      { showModal && <PriceModal onDismiss={ onPriceModalDismiss } onClick={ onAddPriceClick }/> }
     </>
   );
 }

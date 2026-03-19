@@ -11,6 +11,14 @@ export interface IProduct {
   created_at: string;
 };
 
+export interface IPrice {
+  id: number;
+  storeId: number;
+  productId: number;
+  price: string;
+  created_at: string;
+};
+
 
 export const getProducts = async (db: SQLiteDatabase, storeId: number): Promise<IProduct[]> => {
   return await db.getAllAsync(`
@@ -69,7 +77,7 @@ export const addProductPrice = async (
 
 export const updateProduct = async (db: SQLiteDatabase, product: IProduct): Promise<SQLiteRunResult> => {
   return await db.runAsync(`
-    UPDATE stores
+    UPDATE products
     SET
     name = ?,
     unit = ?,
@@ -81,4 +89,27 @@ export const updateProduct = async (db: SQLiteDatabase, product: IProduct): Prom
 
 export const deleteProduct = async (db: SQLiteDatabase, id: number): Promise<SQLiteRunResult> => {
   return await db.runAsync(`UPDATE products SET status = 2 WHERE id = ?`, [id]);
+};
+
+export const getProductStoreId = async (
+  db: SQLiteDatabase,
+  storeId: number,
+  productId: number
+): Promise<number | null> => {
+  return db.getFirstAsync(`
+    SELECT id FROM stores_products WHERE store_id = ? AND product_id = ?
+  `, [storeId, productId]);
+};
+
+export const getProductPrices = async (
+  db: SQLiteDatabase,
+  id: number
+): Promise<IPrice[] | null> => {
+  return await db.getAllAsync(`
+    SELECT * FROM stores_products_prices WHERE store_product_id = ? AND status = 0
+  `, [id]);
+};
+
+export const deleteProductPrice = async (db: SQLiteDatabase, id: number): Promise<SQLiteRunResult> => {
+  return db.runAsync(`UPDATE stores_products_prices SET status = 2 WHERE id = ?`, [id]);
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { StyleSheet } from "react-native";
-import { addProduct, deleteProduct, getProductById } from "@/src/storage/productService";
+import { addProduct, deleteProduct, getProductById, updateProduct } from "@/src/storage/productService";
 import { addProductToStore } from "@/src/storage/productService";
 import { addProductPrice } from "@/src/storage/productService";
 import { IProduct } from "@/src/storage/productService";
@@ -76,6 +76,19 @@ export default function CreateUpdateStore() {
     deleteProduct(db, Number(params.id));
   };
 
+  const onUpdateClick = async () => {
+    const product:IProduct = {
+      id: Number(params.id),
+      status: 0,
+      name: name,
+      unit: unit,
+      picture: "",
+      category: category,
+      created_at: "2026-03-10"
+    };
+    updateProduct(db, product);
+  };
+
 
   return (
     <Screen>
@@ -112,7 +125,7 @@ export default function CreateUpdateStore() {
       }
       { product &&
         <View style={ styles.buttons }>
-          <Button onClick={ () => {} }>Update</Button>
+          <Button onClick={ onUpdateClick }>Update</Button>
         </View>
       }
     </Screen>
