@@ -74,7 +74,7 @@ export default function Product() {
     <ItemList
       id={ price.id }
       onItemClick={ () => {} }
-      title={ "$" + price?.price || "" }
+      title={ "$" + (price?.price || "") }
       subtitle={ price.created_at }
       slot={ <IconButton iconName="close" onIconClick={ () => { onDeletePriceClick(price.id); }} /> } />
   );
