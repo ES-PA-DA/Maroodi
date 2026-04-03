@@ -18,5 +18,7 @@ services:
       POSTGRES_USER: maroodi
       POSTGRES_PASSWORD: maroodi_password
       POSTGRES_DB: maroodi_db
+    volumes:
+       - ./db/init.sql:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"

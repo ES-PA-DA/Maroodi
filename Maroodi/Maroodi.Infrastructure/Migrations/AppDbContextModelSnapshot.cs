@@ -107,10 +107,6 @@ namespace Maroodi.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
-
                     b.Property<int>("CreatorId")
                         .HasColumnType("integer")
                         .HasColumnName("creator_id");
@@ -220,10 +216,6 @@ namespace Maroodi.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("integer")
@@ -345,10 +337,6 @@ namespace Maroodi.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("integer")

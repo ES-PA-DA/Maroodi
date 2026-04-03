@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Maroodi.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDB : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -116,7 +116,6 @@ namespace Maroodi.Infrastructure.Migrations
                     unit_id = table.Column<int>(type: "integer", nullable: false),
                     brand_id = table.Column<int>(type: "integer", nullable: false),
                     status_id = table.Column<int>(type: "integer", nullable: false),
-                    created_by = table.Column<int>(type: "integer", nullable: false),
                     creator_id = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -160,7 +159,6 @@ namespace Maroodi.Infrastructure.Migrations
                     latitude = table.Column<string>(type: "text", nullable: false),
                     longitude = table.Column<string>(type: "text", nullable: false),
                     status_id = table.Column<int>(type: "integer", nullable: false),
-                    created_by = table.Column<int>(type: "integer", nullable: false),
                     creator_id = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -398,7 +396,6 @@ namespace Maroodi.Infrastructure.Migrations
                     store_product_id = table.Column<int>(type: "integer", nullable: false),
                     price = table.Column<decimal>(type: "numeric", nullable: false),
                     status_id = table.Column<int>(type: "integer", nullable: false),
-                    created_by = table.Column<int>(type: "integer", nullable: false),
                     creator_id = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

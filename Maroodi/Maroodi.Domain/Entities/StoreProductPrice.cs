@@ -12,7 +12,7 @@ using System.Text;
         public int StatusId { get; set; }
         public Status Status { get; set; } = null!;
 
-        public int CreatedBy { get; set; }
+        public int CreatorId { get; set; }
         public User Creator { get; set; } = null!;
 
         public ICollection<StoreProductPriceReview> Reviews { get; set; } = new List<StoreProductPriceReview>();

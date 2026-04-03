@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Maroodi.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251219022001_InitDB")]
-    partial class InitDB
+    [Migration("20260328004542_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,10 +109,6 @@ namespace Maroodi.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("integer")
@@ -223,10 +219,6 @@ namespace Maroodi.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("integer")
@@ -348,10 +340,6 @@ namespace Maroodi.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer")
-                        .HasColumnName("created_by");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("integer")
