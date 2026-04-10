@@ -1,5 +1,0 @@
-.venv/
-tests/
-docs/
-.git/
-*.pyc

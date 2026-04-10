@@ -1,2 +1,0 @@
-KG = "KG"
-PZA = "PZA"
