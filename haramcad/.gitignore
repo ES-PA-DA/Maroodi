@@ -1,0 +1,6 @@
+__pycache__
+.venv
+.env
+.doit.db.db
+./src/haramcad.egg-info
+./database.db
