@@ -1,0 +1,121 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/haramcad
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./app:/app/app
+      - ./tests:/app/tests
+      - ./alembic:/app/alembic
+      - ./alembic.ini:/app/alembic.ini
+    command: >
+      sh -c "
+        for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do
+          pg_isready -h db -U postgres && break
+          sleep 1
+        done
+        alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+  db:
+    image: postgres:18-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=haramcad
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 10s
+      retries: 60
+
+  test-db:
+    image: postgres:18-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=haramcad_test
+    volumes:
+      - pgtestdata:/var/lib/postgresql/data
+    ports:
+      - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 10s
+      retries: 60
+
+  test:
+    build: .
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@test-db:5432/haramcad_test
+    depends_on:
+      test-db:
+        condition: service_healthy
+    volumes:
+      - ./app:/app/app
+      - ./tests:/app/tests
+      - ./pytest.ini:/app/pytest.ini
+      - ./alembic:/app/alembic
+      - ./alembic.ini:/app/alembic.ini
+    command: >
+      sh -c "
+        for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30; do
+          pg_isready -h test-db -U postgres && break
+          sleep 1
+        done
+        alembic upgrade head && pytest -v
+      "
+
+  lint:
+    build: .
+    volumes:
+      - ./app:/app/app
+      - ./tests:/app/tests
+      - ./.flake8:/app/.flake8
+    command: flake8 app tests
+
+  migrate:
+    build: .
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/haramcad
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./alembic:/app/alembic
+      - ./alembic.ini:/app/alembic.ini
+      - ./app/infrastructure/database:/app/app/infrastructure/database
+    command: alembic upgrade head
+
+  migration:
+    build: .
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/haramcad
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./alembic:/app/alembic
+      - ./alembic.ini:/app/alembic.ini
+      - ./app/infrastructure/database:/app/app/infrastructure/database
+    command: sh -c "alembic revision --autogenerate -m \"${MESSAGE:-New migration}\""
+
+  docs:
+    build: .
+    ports:
+      - "8001:8001"
+    command: python -c "print('No docs folder yet')"
+
+volumes:
+  pgdata:
+  pgtestdata:
