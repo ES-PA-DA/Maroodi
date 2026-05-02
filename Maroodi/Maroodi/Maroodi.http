@@ -1,6 +1,0 @@
-@Maroodi_HostAddress = http://localhost:5093
-
-GET {{Maroodi_HostAddress}}/api/User/1
-Accept: application/json
-
-###
