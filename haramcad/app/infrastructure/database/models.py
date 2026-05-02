@@ -1,6 +1,6 @@
 """Database models."""
 import uuid
-from sqlalchemy import Column, String, Float, Boolean, DateTime, ForeignKey, Integer
+from sqlalchemy import Column, String, Float, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.infrastructure.database.database import Base
@@ -16,8 +16,7 @@ class ProductModel(Base):
     id = Column(String(36), primary_key=True, default=generate_uuid)
     name = Column(String(255), nullable=False)
     description = Column(String(1000), default="")
-    price = Column(Float, nullable=False)
-    sku = Column(String(100), unique=True, nullable=False)
+    barcode = Column(String(100), unique=True, nullable=False)
     unit = Column(String(20), nullable=False)
     amount = Column(Float, default=0.0)
     created_at = Column(DateTime, server_default=func.now())

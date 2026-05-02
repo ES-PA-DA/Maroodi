@@ -7,8 +7,7 @@ from typing import Optional
 class ProductBase(BaseModel):
     name: str
     description: str = ""
-    price: float
-    sku: str
+    barcode: str
     unit: str
     amount: float = 0.0
 
@@ -20,8 +19,7 @@ class ProductCreate(ProductBase):
 class ProductUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
-    price: Optional[float] = None
-    sku: Optional[str] = None
+    barcode: Optional[str] = None
     unit: Optional[str] = None
     amount: Optional[float] = None
 

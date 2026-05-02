@@ -14,7 +14,7 @@ class ProductRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_sku(self, sku: str) -> Optional[Product]:
+    def get_by_barcode(self, barcode: str) -> Optional[Product]:
         pass
 
     @abstractmethod

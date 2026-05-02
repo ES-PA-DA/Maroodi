@@ -4,7 +4,7 @@
 def test_create_product(client):
     response = client.post(
         "/products/",
-        json={"name": "Coffee", "description": "Fresh coffee", "price": 7.99, "sku": "COFFEE-001", "unit": "kg", "amount": 10.0},
+        json={"name": "Coffee", "description": "Fresh coffee", "price": 7.99, "barcode": "COFFEE-001", "unit": "kg", "amount": 10.0},
     )
     assert response.status_code == 200
     data = response.json()
@@ -18,7 +18,7 @@ def test_create_product(client):
 def test_get_products(client):
     client.post(
         "/products/",
-        json={"name": "Tea", "price": 5.00, "sku": "TEA-001", "unit": "kg", "amount": 5.0},
+        json={"name": "Tea", "price": 5.00, "barcode": "TEA-001", "unit": "kg", "amount": 5.0},
     )
     response = client.get("/products/")
     assert response.status_code == 200
@@ -33,7 +33,7 @@ def test_get_product_not_found(client):
 def test_update_product(client):
     create_response = client.post(
         "/products/",
-        json={"name": "Milk", "price": 3.00, "sku": "MILK-001", "unit": "liter", "amount": 3.0},
+        json={"name": "Milk", "price": 3.00, "barcode": "MILK-001", "unit": "liter", "amount": 3.0},
     )
     product_id = create_response.json()["id"]
 
@@ -51,7 +51,7 @@ def test_update_product(client):
 def test_delete_product(client):
     create_response = client.post(
         "/products/",
-        json={"name": "Sugar", "price": 2.00, "sku": "SUGAR-001", "unit": "kg", "amount": 2.0},
+        json={"name": "Sugar", "price": 2.00, "barcode": "SUGAR-001", "unit": "kg", "amount": 2.0},
     )
     product_id = create_response.json()["id"]
 

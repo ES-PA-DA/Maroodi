@@ -14,8 +14,8 @@ class ProductService:
     def get_by_id(self, id: str) -> Optional[Product]:
         return self.repository.get_by_id(id)
 
-    def get_by_sku(self, sku: str) -> Optional[Product]:
-        return self.repository.get_by_sku(sku)
+    def get_by_barcode(self, barcode: str) -> Optional[Product]:
+        return self.repository.get_by_barcode(barcode)
 
     def create(self, product: Product) -> Product:
         return self.repository.create(product)

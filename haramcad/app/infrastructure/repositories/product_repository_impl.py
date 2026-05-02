@@ -18,16 +18,15 @@ class ProductRepositoryImpl(ProductRepository):
         model = self.db.query(ProductModel).filter(ProductModel.id == id).first()
         return self._to_entity(model) if model else None
 
-    def get_by_sku(self, sku: str) -> Optional[Product]:
-        model = self.db.query(ProductModel).filter(ProductModel.sku == sku).first()
+    def get_by_barcode(self, barcode: str) -> Optional[Product]:
+        model = self.db.query(ProductModel).filter(ProductModel.barcode == barcode).first()
         return self._to_entity(model) if model else None
 
     def create(self, product: Product) -> Product:
         model = ProductModel(
             name=product.name,
             description=product.description,
-            price=product.price,
-            sku=product.sku,
+            barcode=product.barcode,
             unit=product.unit,
             amount=product.amount,
         )
@@ -41,8 +40,7 @@ class ProductRepositoryImpl(ProductRepository):
         if model:
             model.name = product.name
             model.description = product.description
-            model.price = product.price
-            model.sku = product.sku
+            model.barcode = product.barcode
             model.unit = product.unit
             model.amount = product.amount
             self.db.commit()
@@ -62,8 +60,7 @@ class ProductRepositoryImpl(ProductRepository):
             id=model.id,
             name=model.name,
             description=model.description,
-            price=model.price,
-            sku=model.sku,
+            barcode=model.barcode,
             unit=model.unit,
             amount=model.amount,
             created_at=model.created_at,

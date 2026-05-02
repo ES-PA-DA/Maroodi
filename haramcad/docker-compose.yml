@@ -29,7 +29,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=haramcad
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql
     ports:
       - "5434:5432"
     healthcheck:
@@ -45,7 +45,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=haramcad_test
     volumes:
-      - pgtestdata:/var/lib/postgresql/data
+      - pgtestdata:/var/lib/postgresql
     ports:
       - "5435:5432"
     healthcheck:

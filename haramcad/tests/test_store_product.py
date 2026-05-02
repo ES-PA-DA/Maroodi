@@ -4,7 +4,7 @@
 def test_create_store_product(client):
     product_response = client.post(
         "/products/",
-        json={"name": "Coffee", "price": 7.99, "sku": "COFFEE-001", "unit": "kg"},
+        json={"name": "Coffee", "price": 7.99, "barcode": "COFFEE-001", "unit": "kg"},
     )
     store_response = client.post(
         "/stores/",
@@ -32,7 +32,7 @@ def test_create_store_product(client):
 def test_get_store_products_by_store(client):
     product_response = client.post(
         "/products/",
-        json={"name": "Tea", "price": 5.00, "sku": "TEA-001", "unit": "kg"},
+        json={"name": "Tea", "price": 5.00, "barcode": "TEA-001", "unit": "kg"},
     )
     store_response = client.post(
         "/stores/",
@@ -58,7 +58,7 @@ def test_get_store_products_by_store(client):
 def test_get_store_products_by_product(client):
     product_response = client.post(
         "/products/",
-        json={"name": "Sugar", "price": 2.00, "sku": "SUGAR-001", "unit": "kg"},
+        json={"name": "Sugar", "price": 2.00, "barcode": "SUGAR-001", "unit": "kg"},
     )
     store1_response = client.post(
         "/stores/",
@@ -94,7 +94,7 @@ def test_get_store_products_by_product(client):
 def test_get_store_product(client):
     product_response = client.post(
         "/products/",
-        json={"name": "Milk", "price": 3.00, "sku": "MILK-001", "unit": "liter"},
+        json={"name": "Milk", "price": 3.00, "barcode": "MILK-001", "unit": "liter"},
     )
     store_response = client.post(
         "/stores/",
@@ -120,7 +120,7 @@ def test_get_store_product(client):
 def test_update_store_product(client):
     product_response = client.post(
         "/products/",
-        json={"name": "Bread", "price": 2.00, "sku": "BREAD-001", "unit": "kg"},
+        json={"name": "Bread", "price": 2.00, "barcode": "BREAD-001", "unit": "kg"},
     )
     store_response = client.post(
         "/stores/",
@@ -149,7 +149,7 @@ def test_update_store_product(client):
 def test_delete_store_product(client):
     product_response = client.post(
         "/products/",
-        json={"name": "Butter", "price": 4.00, "sku": "BUTTER-001", "unit": "kg"},
+        json={"name": "Butter", "price": 4.00, "barcode": "BUTTER-001", "unit": "kg"},
     )
     store_response = client.post(
         "/stores/",

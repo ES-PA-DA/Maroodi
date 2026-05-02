@@ -10,8 +10,7 @@ class Product:
     id: str = None
     name: str = ""
     description: str = ""
-    price: float = 0.0
-    sku: str = ""
+    barcode: str = ""
     unit: str = ""
     amount: float = 0.0
     created_at: Optional[datetime] = None

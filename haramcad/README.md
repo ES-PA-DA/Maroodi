@@ -18,6 +18,11 @@ app/
 - **Store** - Grocery store (uses UUID)
 - **StoreProduct** - Many-to-many relation with price/stock per store (uses UUID)
 
+## Prerequisites
+
+- **Docker** - Required for all `doit` commands that run services, tests, and migrations inside containers.
+- **uv** - Modern Python package manager.
+
 ## Quick Start (with doit)
 
 All operations run inside Docker using `doit`:
@@ -25,8 +30,15 @@ All operations run inside Docker using `doit`:
 ```bash
 cd haramcad
 
-# Install doit (if not installed)
-pip install doit
+# Install uv (if not installed)
+# Linux/macOS:
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows (PowerShell):
+# irm https://astral.sh/uv/install.ps1 | iex
+
+# Install doit using uv
+uv tool install doit
 
 # Build docker images
 doit build
@@ -56,11 +68,25 @@ doit list
 
 ## Manual Setup
 
+Set up a virtual environment and install dependencies using `uv`:
+
+### Create virtual environment
+
+**Linux/macOS:**
 ```bash
-python3 -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+uv venv venv
+source venv/bin/activate
+```
+
+**Windows (PowerShell):**
+```powershell
+uv venv venv
+venv\Scripts\Activate.ps1
+```
+
+### Install dependencies
+```bash
+uv sync
 ```
 
 ## Test
