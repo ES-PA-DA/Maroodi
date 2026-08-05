@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { ListRenderItem } from "react-native";
+import { ListRenderItem, Text } from "react-native";
 import { useSQLiteContext } from "expo-sqlite";
 import { IStore } from "@/src/storage/storeService";
 import { getStores } from "@/src/storage/storeService";
@@ -31,6 +31,7 @@ export default function Index() {
 
   const [_, onSearchInput] = useState("");
   const [stores, setStores] = useState<IStore[] | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
 
@@ -39,7 +40,19 @@ export default function Index() {
       setStores(data);
     };
 
+    // This is a test to connect with the current not fancy BE
+    const getServerMessage = async () => {
+      try{
+        const res = await fetch("http://10.0.2.2:8000/");
+        const json = await res.json();
+        setMessage(json.message)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchStores();
+    getServerMessage();
   }, []);
 
 
@@ -66,6 +79,7 @@ export default function Index() {
         data={ stores }
         renderItem={ storeRenderItem }
         keyExtractor={ storeKeyExtractor } />
+      <Text>Server Message: {message}</Text>
     </Screen>
   );
 }
