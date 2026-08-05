@@ -4,4 +4,15 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message":"Hello Team!!"}
+    return {"message":"Hello Teammates!!"}
+
+
+@app.get("/health")
+async def health():
+    return {"message":"It's alive"}
+
+
+@app.get("items/{item_id}")
+async def read_item(item_id: int):
+    print("calling item",item_id)
+    return {"item_id":item_id}

@@ -56,14 +56,26 @@ export default function Index() {
   }, []);
 
 
-  const storeRenderItem: ListRenderItem<Store> = ({ item: store }) => (
-    <ItemList
-      id={ store.id }
-      title={ store.name }
-      subtitle={ store.created_at }
-      slot={ <TextSlot text={ `N/A product(s)` } /> }
-      onItemClick={(id: number) => {router.push({ pathname: "./products", params: { storeId: id }})}} />
-  );
+  const getItem = async (itemId) =>
+    {
+      const res = await fetch(`http://10.0.2.2:8000/items/${itemId}`);
+      const json = await res.json();
+      return json;
+    }
+
+  const storeRenderItem: ListRenderItem<Store> = ({ item: store }) => {
+    
+    getItem(store.id);
+
+    return (
+      <ItemList
+        id={ store.id }
+        title={ store.name }
+        subtitle={ store.created_at }
+        slot={ <TextSlot text={ `N/A product(s)` } /> }
+        onItemClick={(id: number) => {router.push({ pathname: "./products", params: { storeId: id }})}} />
+    )
+  };
 
 
   return (
