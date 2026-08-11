@@ -1,23 +1,84 @@
 package com.example.baaz_android
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.baaz_android.network.MaroodiInstance
-import com.example.baaz_android.network.ResponseMessage
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.createGraph
 import com.example.baaz_android.ui.theme.BaazandroidTheme
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
+
+@PreviewScreenSizes
+@Composable
+fun BaazandroidApp() {
+    val navController = rememberNavController()
+    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+    val graph = navController.createGraph(startDestination = Screen.Home.route) {
+            composable(route = Screen.Home.route) {
+                HomeScreen()
+            }
+            composable(route = Screen.Profile.route) {
+                ProfileScreen()
+            }
+            composable(route = Screen.Favorites.route) {
+                FavoritesScreen()
+            }
+    }
+
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            AppDestinations.entries.forEach {
+                item(
+                    icon = {
+                        Icon(
+                            painterResource(it.icon),
+                            contentDescription = it.label
+                        )
+                    },
+                    label = { Text(it.label) },
+                    selected = it == currentDestination,
+                    onClick = {
+                        currentDestination = it
+                        navController.navigate(it.route)
+                    }
+                )
+            }
+        }
+    ) {
+        NavHost(navController=navController, graph=graph)
+    }
+}
+
+
+sealed class Screen(val route: String) {
+    object Home: Screen("home_screen")
+    object Favorites: Screen("favorites_screen")
+    object Profile: Screen("profile_screen")
+}
+
+
+enum class AppDestinations(
+    val label: String,
+    val icon: Int,
+    val route: String,
+) {
+    HOME("Home", R.drawable.ic_home, route = Screen.Home.route),
+    FAVORITES("Favorites", R.drawable.ic_favorite, route = Screen.Favorites.route),
+    PROFILE("Profile", R.drawable.ic_account_box, route = Screen.Profile.route),
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,49 +86,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BaazandroidTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                BaazandroidApp()
             }
         }
-        getMessage()
-    }
-
-    private fun getMessage() {
-        MaroodiInstance.apiInterface.getMessage().enqueue(object: Callback<ResponseMessage?>{
-            override fun onResponse(
-                call: Call<ResponseMessage?>,
-                response: Response<ResponseMessage?>
-            ) {
-                val response = response.body()
-                Toast.makeText(this@MainActivity, "Server message: "+response?.message, Toast.LENGTH_LONG).show()
-            }
-
-            override fun onFailure(call: Call<ResponseMessage?>, t: Throwable) {
-                print(t.localizedMessage)
-                Toast.makeText(this@MainActivity, t.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }
 
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    BaazandroidTheme {
-        Greeting("Android")
-    }
-}
