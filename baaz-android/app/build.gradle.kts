@@ -20,6 +20,9 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField("String", "BASE_URL", "\"http://192.168.100.168:8000\"")
+        }
         release {
             optimization {
                 enable = false
@@ -32,6 +35,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

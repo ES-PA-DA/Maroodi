@@ -1,10 +1,11 @@
 package com.example.baaz_android.network
+import com.example.baaz_android.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.Call
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-private const val baseUrl = "http://10.0.2.2:8000";
+private const val baseUrl = BuildConfig.BASE_URL
 
 data class ResponseMessage(
     val message: String
