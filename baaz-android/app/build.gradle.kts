@@ -42,18 +42,25 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.material)
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

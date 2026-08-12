@@ -25,10 +25,10 @@ import com.example.baaz_android.ui.theme.BaazandroidTheme
 @Composable
 fun BaazandroidApp() {
     val navController = rememberNavController()
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
-    val graph = navController.createGraph(startDestination = Screen.Home.route) {
-            composable(route = Screen.Home.route) {
-                HomeScreen()
+    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.STORE) }
+    val graph = navController.createGraph(startDestination = Screen.Store.route) {
+            composable(route = Screen.Store.route) {
+                StoreScreen()
             }
             composable(route = Screen.Profile.route) {
                 ProfileScreen()
@@ -64,9 +64,10 @@ fun BaazandroidApp() {
 
 
 sealed class Screen(val route: String) {
-    object Home: Screen("home_screen")
+    object Store: Screen("store_screen")
     object Favorites: Screen("favorites_screen")
     object Profile: Screen("profile_screen")
+    object AddStore: Screen("add_store_screen")
 }
 
 
@@ -75,7 +76,7 @@ enum class AppDestinations(
     val icon: Int,
     val route: String,
 ) {
-    HOME("Home", R.drawable.ic_home, route = Screen.Home.route),
+    STORE("Stores", R.drawable.ic_store, route = Screen.Store.route),
     FAVORITES("Favorites", R.drawable.ic_favorite, route = Screen.Favorites.route),
     PROFILE("Profile", R.drawable.ic_account_box, route = Screen.Profile.route),
 }
