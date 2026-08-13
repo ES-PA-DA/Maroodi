@@ -67,7 +67,6 @@ sealed class Screen(val route: String) {
     object Store: Screen("store_screen")
     object Favorites: Screen("favorites_screen")
     object Profile: Screen("profile_screen")
-    object AddStore: Screen("add_store_screen")
 }
 
 

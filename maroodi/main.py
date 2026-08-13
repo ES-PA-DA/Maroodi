@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -12,7 +13,17 @@ async def health():
     return {"message":"It's alive"}
 
 
-@app.get("items/{item_id}")
-async def read_item(item_id: int):
-    print("calling item",item_id)
-    return {"item_id":item_id}
+class Store(BaseModel):
+    name: str 
+    latitude: float | None = None
+    longitude: float | None = None
+
+    def __repr__(self):
+        return f"Store(name='{self.name}', latitude='{self.latitude}', longitude='{longitude}')"
+
+
+@app.post("/store/")
+async def create_store(store:Store):
+    print(f"New store in the city: {store}")
+    return store
+
