@@ -35,4 +35,7 @@ interface ApiInterface {
 
     @POST("/store/")
     fun postStore(@Body store: StoreItem): Call<StoreItem>
+
+    @POST("/geocode/")
+    fun postGeocodeStoreAddress(@Body storeAddress: String): Call<List<StoreItem>>
 }
